@@ -1,0 +1,1 @@
+Open the documentation.html file via browser and start to play the game
