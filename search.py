@@ -84,14 +84,103 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    start_state = problem.getStartState()
+
+    #fifo to track state and path
+    lifo = util.Stack()
+
+    #create the first node it has no path so far
+    node = Node(start_state, [])
+
+    expanded_states = set()
+
+    lifo.push(node)
+
+    while not lifo.isEmpty():
+        node_state = lifo.pop()
+
+        #if the state is the goal state return the path
+        if problem.isGoalState(node_state.state):
+            path = node_state.get_path()
+            return path
+
+        elif node_state.state not in expanded_states:
+            expanded_states.add(node_state.state)
+            successors = problem.getSuccessors(node_state.state)
+            for successor in successors:
+                lifo.push(Node(successor[0], node_state.addPath(successor[1])))
+    return []
+
+class Node(object):
+        """
+        stores current state
+        and the path used to reach that state
+
+        """
+        def __init__(self, state, path):
+
+            self.state = state
+            self.path = path
+
+        def get_path(self):
+            """
+             :return :list which is the path
+                      used to reach a certain path
+            """
+            if not self.path:
+                return []
+            return self.path
+
+        def addPath(self, action):
+            if not self.path:
+                return [action]
+            p = self.path[:]
+            p.append(action)
+            return p
+
+        def get_state(self):
+            """
+            :return string -> state
+            """
+            return self.state
+
 
 def breadthFirstSearch(problem):
     """
     Search the shallowest nodes in the search tree first.
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    #the initial position of the pacman
+    start_state = problem.getStartState()
+
+    #breath first search uses first in first out queue
+    #to transverse a tre
+    fifo = util.Queue()
+
+    #this keeps track of node that have been expanded
+    expanded_sets  = set()
+
+    #push/add the first node to the queue
+    fifo.push(Node(start_state, []))
+
+    while not fifo.isEmpty():
+        node = fifo.pop()
+
+        #if a state is the goal state then return the path
+        if problem.isGoalState(node.get_state()):
+            return node.get_path()
+
+        # don't expand state twice
+        if node.get_state() not in expanded_sets:
+            expanded_sets.add(node.get_state())
+
+            #expand state
+            successors = problem.getSuccessors(node.get_state())
+
+            for succesor in successors:
+                fifo.push(Node(succesor[0], node.addPath(succesor[1])))
+    return None
 
 def uniformCostSearch(problem):
     "Search the node of least total cost first. "
