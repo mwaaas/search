@@ -4,7 +4,7 @@ speed=0.2
 layout=mediumMaze
 quiz=1
 fn=tinyMazeSearch
-
+zoom=1.0
 
 
 playPacman:
@@ -20,7 +20,7 @@ autograde:
 	@python autograder.py -q q$(quiz)
 
 playAgent:
-	@python pacman.py --layout $(layout) --pacman $(pacman)  -a fn=$(fn)
+	@python pacman.py --layout $(layout) --pacman $(pacman)  -a fn=$(fn) -z $(zoom)
 
 typesOfMaize:
 	@echo tinyMaze
