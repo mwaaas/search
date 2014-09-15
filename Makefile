@@ -1,7 +1,7 @@
 maze=tinyMaze
 pacman=SearchAgent
 speed=0.2
-layout=tinyMaze
+layout=mediumMaze
 quiz=1
 fn=tinyMazeSearch
 
@@ -26,3 +26,10 @@ typesOfMaize:
 	@echo tinyMaze
 	@echo testMaze
 	@echo mediumMaze
+
+typesOf_fn:
+	@echo bfs
+	@echo dfs
+	@echo ucs
+
+help: typesOf_fn  typesOfMaize
