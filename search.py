@@ -117,10 +117,11 @@ class Node(object):
         and the path used to reach that state
 
         """
-        def __init__(self, state, path):
+        def __init__(self, state, path, cost=0):
 
             self.state = state
             self.path = path
+            self.cost = cost
 
         def get_path(self):
             """
@@ -143,6 +144,9 @@ class Node(object):
             :return string -> state
             """
             return self.state
+
+        def addCost(self, cost):
+            return self.cost + cost
 
 
 def breadthFirstSearch(problem):
@@ -184,8 +188,38 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     "Search the node of least total cost first. "
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    start_state = problem.getStartState()
+    first_state = Node(start_state, [], 0)
+
+
+    # the lowest node to be expanded first
+    priority_queue = util.PriorityQueue()
+
+    # add the first node to expand .the priority is zero (we want to exapand it first)
+    priority_queue.push(first_state, first_state.cost)
+
+    # to avoid repeating expanded states
+    expanded_states = set()
+
+    while not priority_queue.isEmpty():
+        node_to_expand = priority_queue.pop()
+
+        #don't expand the state if it is already expanded
+        if node_to_expand.state not in expanded_states:
+            #if its goal state return the path
+            if problem.isGoalState(node_to_expand.state):
+                return node_to_expand.path
+
+            # don't expand this state again
+            expanded_states.add(node_to_expand.state)
+
+            # add the child node of this state to queue to be expanded
+            for successor in problem.getSuccessors(node_to_expand.state):
+                child_node = Node(successor[0], node_to_expand.addPath(successor[1]), node_to_expand.addCost(successor[2]))
+                priority_queue.push(child_node, child_node.cost)
+
+    return None
 
 def nullHeuristic(state, problem=None):
     """
