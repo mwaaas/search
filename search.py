@@ -230,8 +230,35 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     "Search the node that has the lowest combined cost and heuristic first."
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # function to find the priority
+    cost_plus_heuristic = lambda item: item.cost + heuristic(item.state, problem)
+    priority_queue = util.PriorityQueueWithFunction(cost_plus_heuristic)
+
+    # first node to expand
+    start_state = Node(problem.getStartState(), [])
+
+    priority_queue.push(start_state)
+
+    # don't expand already expanded states
+    expanded_state = set()
+
+    while not priority_queue.isEmpty():
+        node_to_expand = priority_queue.pop()
+
+        # don't expand expanded states
+        if node_to_expand.state not in expanded_state:
+            # if its goal state return path
+            if problem.isGoalState(node_to_expand.state):
+                return node_to_expand.path
+
+            # don't expand expanded nodes
+            expanded_state.add(node_to_expand.state)
+
+            # add the child nodes to be expanded
+            for successor in problem.getSuccessors(node_to_expand.state):
+                child_node = Node(successor[0], node_to_expand.addPath(successor[1]),
+                                  node_to_expand.addCost(successor[2]))
+                priority_queue.push(child_node)
 
 
 # Abbreviations
